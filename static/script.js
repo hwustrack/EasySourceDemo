@@ -16,6 +16,13 @@ function showJobs(data) {
     var table = dataToTable(formatted);
 
     document.getElementById('jobs-table').innerHTML = table;
+    filterJobs();
+}
+
+function filterJobs() {
+    var tbody = document.getElementById('table-body');
+    var arr = Array.prototype.slice.call(tbody.getElementsByTagName('tr'));
+    arr.forEach(i => i.style.display = 'none');
 }
 
 function httpGetAsync(theUrl, callback) {
@@ -61,11 +68,15 @@ function dataToTable(data) {
     return '<table>' +
         '<thead><tr>' +
         headerRow +
-        '</tr></thead><tbody>' +
+        '</tr></thead><tbody id="table-body">' +
         bodyRows +
         '</tbody></table>';
 }
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function getElementsWithText(str, tag) {
+    return Array.prototype.slice.call(document.getElementsByTagName(tag)).filter(el => el.textContent.trim() === str.trim());
 }
