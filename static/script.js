@@ -6,8 +6,26 @@ JOBS = {
 }
 
 window.addEventListener('load', function () {
+    addSelectorListeners();
     httpGetAsync("https://boards-api.greenhouse.io/v1/boards/reddit/jobs", showJobs)
 });
+
+function addSelectorListeners() {
+    const locationSelector = document.getElementById('location-selector');
+    locationSelector.addEventListener('change', (event) => {
+        filterJobs();
+    });
+
+    const sizeSelector = document.getElementById('size-selector');
+    sizeSelector.addEventListener('change', (event) => {
+        filterJobs();
+    });
+
+    const industrySelector = document.getElementById('industry-selector');
+    industrySelector.addEventListener('change', (event) => {
+        filterJobs();
+    });
+}
 
 function showJobs(data) {
     console.log(data);
@@ -16,13 +34,18 @@ function showJobs(data) {
     var table = dataToTable(formatted);
 
     document.getElementById('jobs-table').innerHTML = table;
-    // filterJobs();
+    filterJobs();
 }
 
 function filterJobs() {
     var tbody = document.getElementById('table-body');
     var arr = Array.prototype.slice.call(tbody.getElementsByTagName('tr'));
     arr.forEach(i => i.style.display = 'none');
+
+    var locationEl = document.getElementById('location-selector');
+    var selectedLocation = locationEl.options[locationEl.selectedIndex].text;
+    arr = getElementsWithText(selectedLocation, 'tr');
+    arr.forEach(i => i.style.display = 'table-row');
 }
 
 function httpGetAsync(theUrl, callback) {
@@ -82,5 +105,5 @@ function capitalizeFirstLetter(string) {
 }
 
 function getElementsWithText(str, tag) {
-    return Array.prototype.slice.call(document.getElementsByTagName(tag)).filter(el => el.textContent.trim() === str.trim());
+    return Array.prototype.slice.call(document.getElementsByTagName(tag)).filter(el => el.textContent.trim().includes(str.trim()));
 }
