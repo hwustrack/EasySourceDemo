@@ -16,7 +16,7 @@ function showJobs(data) {
     var table = dataToTable(formatted);
 
     document.getElementById('jobs-table').innerHTML = table;
-    filterJobs();
+    // filterJobs();
 }
 
 function filterJobs() {
@@ -36,8 +36,8 @@ function httpGetAsync(theUrl, callback) {
 }
 
 function formatData(data) {
-    var formatted = removeNestedKey(data, "location", "name");
-    formatted = _.map(formatted, function (o) { return _.pick(o, 'title', 'location'); });
+    var formatted = removeNestedKey(data, 'location', 'name');
+    formatted = _.map(formatted, function (o) { return _.pick(o, 'title', 'location', 'absolute_url'); });
     return formatted;
 }
 
@@ -53,14 +53,18 @@ function dataToTable(data) {
     var headerRow = '';
     var bodyRows = '';
 
-    cols.map(function (col) {
+    cols.filter(col => col !== 'absolute_url').map(function (col) {
         headerRow += '<th>' + capitalizeFirstLetter(col) + '</th>';
     });
 
     data.map(function (row) {
         bodyRows += '<tr>';
-        cols.map(function (colName) {
-            bodyRows += '<td>' + row[colName] + '<td>';
+        cols.filter(col => col !== 'absolute_url').map(function (colName) {
+            if (colName === 'title') {
+                bodyRows += '<td><a href="' + row['absolute_url'] + '">' + row[colName] + '</a><td>';
+            } else {
+                bodyRows += '<td>' + row[colName] + '<td>';
+            }
         });
         bodyRows += '</tr>';
     });
