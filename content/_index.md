@@ -26,5 +26,5 @@ I would like to work in
   <option value="fin">Finance</option>
 </select>
 
-<div id="jobs-table">
+<div id="jobs-table" class="m-4">
 </div>

@@ -28,8 +28,6 @@ function addSelectorListeners() {
 }
 
 function showJobs(data) {
-    console.log(data);
-
     var formatted = formatData(data["jobs"]);
     var table = dataToTable(formatted);
 
@@ -54,7 +52,7 @@ function httpGetAsync(theUrl, callback) {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
             callback(JSON.parse(xmlHttp.responseText));
     }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.open("GET", theUrl, true);
     xmlHttp.send(null);
 }
 
@@ -77,22 +75,22 @@ function dataToTable(data) {
     var bodyRows = '';
 
     cols.filter(col => col !== 'absolute_url').map(function (col) {
-        headerRow += '<th>' + capitalizeFirstLetter(col) + '</th>';
+        headerRow += '<th class="border px-4 py-2">' + capitalizeFirstLetter(col) + '</th>';
     });
 
     data.map(function (row) {
         bodyRows += '<tr>';
         cols.filter(col => col !== 'absolute_url').map(function (colName) {
             if (colName === 'title') {
-                bodyRows += '<td><a href="' + row['absolute_url'] + '">' + row[colName] + '</a><td>';
+                bodyRows += '<td class="border px-4 py-2"><a href="' + row['absolute_url'] + '">' + row[colName] + '</a></td>';
             } else {
-                bodyRows += '<td>' + row[colName] + '<td>';
+                bodyRows += '<td class="border px-4 py-2">' + row[colName] + '</td>';
             }
         });
         bodyRows += '</tr>';
     });
 
-    return '<table>' +
+    return '<table class="m-auto">' +
         '<thead><tr>' +
         headerRow +
         '</tr></thead><tbody id="table-body">' +
