@@ -4,28 +4,29 @@
     <h1 class="font-serif text-5xl text-gray-600">{{ .Title }}</h1>
 
     <p>I would like to live in</p>
-    <select id="location-selector">
-        <option value=""></option>
-        <option value="sf">San Francisco</option>
-        <option value="nyc">New York</option>
-        <option value="chi">Chicago</option>
+    <select id="location-selector" onchange="filterJobs()">
+        <option value="#inv4l!d"></option>
+        <option value="San Francisco">San Francisco</option>
+        <option value="New York">New York</option>
+        <option value="Chicago">Chicago</option>
+        <option value="Remote">Remote</option>
     </select>
 
     <p>I would like my company size to be</p>
-    <select id="size-selector">
+    <select id="size-selector" onchange="filterJobs()">
         <option value="sm">Small</option>
         <option value="med">Medium</option>
         <option value="lg">Large</option>
     </select>
 
     <p>I would like to work in</p>
-    <select id="industry-selector">
+    <select id="industry-selector" onchange="filterJobs()">
         <option value="tech">Tech</option>
         <option value="health">Healthcare</option>
         <option value="fin">Finance</option>
     </select>
 
-    <div id="jobs-table" class="m-4">
+    <div id="jobs-table-div" class="m-4">
     </div>
 
 </article>

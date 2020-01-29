@@ -1,65 +1,86 @@
-JOBS = {
+const COMPANIES = {
     "reddit": {
         "size": "med",
-        "industry": "tech"
+        "industry": "tech",
+        "fetched": false
+    },
+    "gitlab": {
+        "size": "lg",
+        "industry": "tech",
+        "fetched": false
     }
-}
+};
+
+var JOBS = [];
 
 window.addEventListener('load', function () {
-    addSelectorListeners();
-    httpGetAsync("https://boards-api.greenhouse.io/v1/boards/reddit/jobs", showJobs)
+    getJobs();
 });
 
-function addSelectorListeners() {
-    const locationSelector = document.getElementById('location-selector');
-    locationSelector.addEventListener('change', (event) => {
-        filterJobs();
-    });
-
-    const sizeSelector = document.getElementById('size-selector');
-    sizeSelector.addEventListener('change', (event) => {
-        filterJobs();
-    });
-
-    const industrySelector = document.getElementById('industry-selector');
-    industrySelector.addEventListener('change', (event) => {
-        filterJobs();
+function getJobs() {
+    Object.keys(COMPANIES).forEach(function (company) {
+        httpGetAsync("https://boards-api.greenhouse.io/v1/boards/" + company + "/jobs", company, collectData)
     });
 }
 
-function showJobs(data) {
-    var formatted = formatData(data["jobs"]);
-    var table = dataToTable(formatted);
-
-    document.getElementById('jobs-table').innerHTML = table;
-    filterJobs();
+function insertJobsTable() {
+    var table = dataToTable(JOBS);
+    var tableElement = document.getElementById('jobs-table-div');
+    tableElement.style.display = 'none';
+    tableElement.innerHTML = table;
 }
 
 function filterJobs() {
-    var tbody = document.getElementById('table-body');
-    var arr = Array.prototype.slice.call(tbody.getElementsByTagName('tr'));
-    arr.forEach(i => i.style.display = 'none');
+    document.getElementById('jobs-table-div').style.display = 'block';
+    var all = Array.prototype.slice.call(document.getElementsByTagName('tr'));
+    all.forEach(i => i.style.display = 'table-row');
 
-    var locationEl = document.getElementById('location-selector');
-    var selectedLocation = locationEl.options[locationEl.selectedIndex].text;
-    arr = getElementsWithText(selectedLocation, 'tr');
-    arr.forEach(i => i.style.display = 'table-row');
+    selectorValues = [];
+    selectorValues.push(getSelectorValue('location-selector'));
+    selectorValues.push(hashString(getSelectorValue('size-selector')));
+    selectorValues.push(hashString(getSelectorValue('industry-selector')));
+    var toHide = getElementsWithoutText(selectorValues, 'tr');
+    toHide.forEach(i => i.style.display = 'none');
+    document.getElementById('header-row').style.display = 'table-row';
 }
 
-function httpGetAsync(theUrl, callback) {
+function getSelectorValue(selectorId) {
+    var element = document.getElementById(selectorId);
+    return element.options[element.selectedIndex].value;
+}
+
+function httpGetAsync(url, company, callback) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(JSON.parse(xmlHttp.responseText));
+            callback(company, JSON.parse(xmlHttp.responseText));
     }
-    xmlHttp.open("GET", theUrl, true);
+    xmlHttp.open("GET", url, true);
     xmlHttp.send(null);
 }
 
-function formatData(data) {
-    var formatted = removeNestedKey(data, 'location', 'name');
-    formatted = _.map(formatted, function (o) { return _.pick(o, 'title', 'location', 'absolute_url'); });
-    return formatted;
+function collectData(company, data) {
+    data['jobs'].forEach(function (item) {
+        var job = {};
+        job['company'] = company;
+        job['size'] = COMPANIES[company]['size'];
+        job['industry'] = COMPANIES[company]['industry'];
+        job['title'] = item['title'];
+        job['location'] = item['location']['name'];
+        job['absolute_url'] = item['absolute_url'];
+        JOBS.push(job);
+    });
+
+    COMPANIES[company]['fetched'] = true;
+    if (isDoneFetching()) insertJobsTable();
+}
+
+function isDoneFetching() {
+    var isDone = true;
+    Object.keys(COMPANIES).forEach(function (company) {
+        if (!COMPANIES[company]['fetched']) isDone = false;
+    });
+    return isDone;
 }
 
 function removeNestedKey(obj, parent, child) {
@@ -74,7 +95,8 @@ function dataToTable(data) {
     var headerRow = '';
     var bodyRows = '';
 
-    cols.filter(col => col !== 'absolute_url').map(function (col) {
+    var ignoredHeaders = ['absolute_url', 'size', 'industry'];
+    cols.filter(col => !ignoredHeaders.includes(col)).map(function (col) {
         headerRow += '<th class="border px-4 py-2">' + capitalizeFirstLetter(col) + '</th>';
     });
 
@@ -83,6 +105,8 @@ function dataToTable(data) {
         cols.filter(col => col !== 'absolute_url').map(function (colName) {
             if (colName === 'title') {
                 bodyRows += '<td class="border px-4 py-2"><a href="' + row['absolute_url'] + '">' + row[colName] + '</a></td>';
+            } else if (colName === 'size' || colName == 'industry') {
+                bodyRows += '<td class="hidden">' + hashString(row[colName]) + '</td>'; // hash these values so they're more unique
             } else {
                 bodyRows += '<td class="border px-4 py-2">' + row[colName] + '</td>';
             }
@@ -91,7 +115,7 @@ function dataToTable(data) {
     });
 
     return '<table class="m-auto">' +
-        '<thead><tr>' +
+        '<thead><tr id="header-row">' +
         headerRow +
         '</tr></thead><tbody id="table-body">' +
         bodyRows +
@@ -102,6 +126,18 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function getElementsWithText(str, tag) {
-    return Array.prototype.slice.call(document.getElementsByTagName(tag)).filter(el => el.textContent.trim().includes(str.trim()));
+function getElementsWithoutText(strs, tag) {
+    return Array.prototype.slice.call(document.getElementsByTagName(tag)).filter(el => strs.some(s => !el.textContent.trim().includes(s)));
 }
+
+// Java's hash function - https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+function hashString(str) {
+    var hash = 0, i, chr;
+    if (str.length === 0) return hash;
+    for (i = 0; i < str.length; i++) {
+        chr = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+};

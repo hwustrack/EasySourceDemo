@@ -1,4 +1,4 @@
 baseURL = "https://zealous-lamport-07038f.netlify.com/"
 languageCode = "en-us"
-title = "My New Hugo Site"
+title = "Easy Source"
 theme = "tailwindcss-starter"
