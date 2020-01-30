@@ -8,6 +8,21 @@ const COMPANIES = {
         "size": "lg",
         "industry": "tech",
         "fetched": false
+    },
+    "betterment": {
+        "size": "sm",
+        "industry": "fin",
+        "fetched": false
+    },
+    "birchbox": {
+        "size": "med",
+        "industry": "bty",
+        "fetched": false
+    },
+    "thrillist": {
+        "size": "med",
+        "industry": "mda",
+        "fetched": false
     }
 };
 
