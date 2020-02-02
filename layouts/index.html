@@ -33,8 +33,27 @@
         <option value="fin">Finance</option>
     </select>
 
-    <div id="jobs-table-div" class="m-4">
-    </div>
+    <div id="app">
+        <div>
+        <select v-model="column">
+          <option :value="null">No Column Filter</option>
+          <option v-for="col in cols" :key="col">{{ "{{ col }}" }}</option>
+        </select>
+        <input type="text" v-model="search" placeholder="Search">
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th v-for="col in cols" :key="col">{{ "{{ col }}" }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in rows" :key="row.id">
+              <td v-for="col in cols" :key="col">{{ "{{ row[col] }}" }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
 </article>
 {{ end }}

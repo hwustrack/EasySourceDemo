@@ -29,130 +29,168 @@ const COMPANIES = {
 var JOBS = [];
 
 window.addEventListener('load', function () {
-    getJobs();
+    new Vue({
+        el: '#app',
+        data: () => ({
+          search: null,
+          column: null,
+          items: []
+        }),
+        beforeMount () {
+          this.items = Array.from(Array(20), (x,i) => {
+            return {
+              id: i,
+              name: Math.random().toString(36).substring(7),
+              title: Math.random().toString(36).substring(7),
+              description: Math.random().toString(36).substring(7)
+            }
+          })
+        },
+        computed: {
+          cols () {
+            return this.items.length >= 1 ? Object.keys(this.items[0]) : []
+          },
+          rows () {
+            if (!this.items.length) {
+              return []
+            }
+            
+            return this.items.filter(item => {
+              let props = (this.search && this.column) ? [item[this.column]] : Object.values(item)
+              
+              
+              return props.some(prop => !this.search || ((typeof prop === 'string') ? prop.includes(this.search) : prop.toString(10).includes(this.search)))
+            })
+          }
+        }
+      })
 });
 
-function getJobs() {
-    Object.keys(COMPANIES).forEach(function (company) {
-        httpGetAsync("https://boards-api.greenhouse.io/v1/boards/" + company + "/jobs", company, collectData)
-    });
-}
+// window.addEventListener('load', function () {
+//     getJobs();
+// });
 
-function insertJobsTable() {
-    var table = dataToTable(JOBS);
-    var tableElement = document.getElementById('jobs-table-div');
-    tableElement.style.display = 'none';
-    tableElement.innerHTML = table;
-}
+// function getJobs() {
+//     Object.keys(COMPANIES).forEach(function (company) {
+//         httpGetAsync("https://boards-api.greenhouse.io/v1/boards/" + company + "/jobs", company, collectData)
+//     });
+// }
 
-function filterJobs() {
-    document.getElementById('jobs-table-div').style.display = 'block';
-    var all = Array.prototype.slice.call(document.getElementsByTagName('tr'));
-    all.forEach(i => i.style.display = 'table-row');
+// function insertJobsTable() {
+//     var table = dataToTable(JOBS);
+//     var tableElement = document.getElementById('jobs-table-div');
+//     tableElement.style.display = 'none';
+//     tableElement.innerHTML = table;
+// }
 
-    selectorValues = [];
-    selectorValues.push(getSelectorValue('location-selector'));
-    selectorValues.push(hashString(getSelectorValue('size-selector')));
-    selectorValues.push(hashString(getSelectorValue('industry-selector')));
-    var toHide = getElementsWithoutText(selectorValues, 'tr');
-    toHide.forEach(i => i.style.display = 'none');
-    document.getElementById('header-row').style.display = 'table-row';
-}
+// function filterJobs() {
+//     document.getElementById('jobs-table-div').style.display = 'block';
+//     var all = Array.prototype.slice.call(document.getElementsByTagName('tr'));
+//     all.forEach(i => i.style.display = 'table-row');
 
-function getSelectorValue(selectorId) {
-    var element = document.getElementById(selectorId);
-    return element.options[element.selectedIndex].value;
-}
+//     selectorValues = [];
+//     selectorValues.push(getSelectorValue('location-selector'));
+//     selectorValues.push(hashString(getSelectorValue('size-selector')));
+//     selectorValues.push(hashString(getSelectorValue('industry-selector')));
+//     var toHide = getElementsWithoutText(selectorValues, 'tr');
+//     toHide.forEach(i => i.style.display = 'none');
+//     document.getElementById('header-row').style.display = 'table-row';
+// }
 
-function httpGetAsync(url, company, callback) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(company, JSON.parse(xmlHttp.responseText));
-    }
-    xmlHttp.open("GET", url, true);
-    xmlHttp.send(null);
-}
+// function getSelectorValue(selectorId) {
+//     var element = document.getElementById(selectorId);
+//     return element.options[element.selectedIndex].value;
+// }
 
-function collectData(company, data) {
-    data['jobs'].forEach(function (item) {
-        var job = {};
-        job['company'] = company;
-        job['size'] = COMPANIES[company]['size'];
-        job['industry'] = COMPANIES[company]['industry'];
-        job['title'] = item['title'];
-        job['location'] = item['location']['name'];
-        job['absolute_url'] = item['absolute_url'];
-        JOBS.push(job);
-    });
+// function httpGetAsync(url, company, callback) {
+//     var xmlHttp = new XMLHttpRequest();
+//     xmlHttp.onreadystatechange = function () {
+//         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+//             callback(company, JSON.parse(xmlHttp.responseText));
+//     }
+//     xmlHttp.open("GET", url, true);
+//     xmlHttp.send(null);
+// }
 
-    COMPANIES[company]['fetched'] = true;
-    if (isDoneFetching()) insertJobsTable();
-}
+// function collectData(company, data) {
+//     data['jobs'].forEach(function (item) {
+//         var job = {};
+//         job['company'] = company;
+//         job['size'] = COMPANIES[company]['size'];
+//         job['industry'] = COMPANIES[company]['industry'];
+//         job['title'] = item['title'];
+//         job['location'] = item['location']['name'];
+//         job['absolute_url'] = item['absolute_url'];
+//         JOBS.push(job);
+//     });
 
-function isDoneFetching() {
-    var isDone = true;
-    Object.keys(COMPANIES).forEach(function (company) {
-        if (!COMPANIES[company]['fetched']) isDone = false;
-    });
-    return isDone;
-}
+//     COMPANIES[company]['fetched'] = true;
+//     if (isDoneFetching()) insertJobsTable();
+// }
 
-function removeNestedKey(obj, parent, child) {
-    obj.forEach(function (item) {
-        item[parent] = item[parent][child];
-    });
-    return obj;
-}
+// function isDoneFetching() {
+//     var isDone = true;
+//     Object.keys(COMPANIES).forEach(function (company) {
+//         if (!COMPANIES[company]['fetched']) isDone = false;
+//     });
+//     return isDone;
+// }
 
-function dataToTable(data) {
-    var cols = Object.keys(data[0]);
-    var headerRow = '';
-    var bodyRows = '';
+// function removeNestedKey(obj, parent, child) {
+//     obj.forEach(function (item) {
+//         item[parent] = item[parent][child];
+//     });
+//     return obj;
+// }
 
-    var ignoredHeaders = ['absolute_url', 'size', 'industry'];
-    cols.filter(col => !ignoredHeaders.includes(col)).map(function (col) {
-        headerRow += '<th class="border px-4 py-2">' + capitalizeFirstLetter(col) + '</th>';
-    });
+// function dataToTable(data) {
+//     var cols = Object.keys(data[0]);
+//     var headerRow = '';
+//     var bodyRows = '';
 
-    data.map(function (row) {
-        bodyRows += '<tr>';
-        cols.filter(col => col !== 'absolute_url').map(function (colName) {
-            if (colName === 'title') {
-                bodyRows += '<td class="border px-4 py-2"><a href="' + row['absolute_url'] + '">' + row[colName] + '</a></td>';
-            } else if (colName === 'size' || colName == 'industry') {
-                bodyRows += '<td class="hidden">' + hashString(row[colName]) + '</td>'; // hash these values so they're more unique
-            } else {
-                bodyRows += '<td class="border px-4 py-2">' + row[colName] + '</td>';
-            }
-        });
-        bodyRows += '</tr>';
-    });
+//     var ignoredHeaders = ['absolute_url', 'size', 'industry'];
+//     cols.filter(col => !ignoredHeaders.includes(col)).map(function (col) {
+//         headerRow += '<th class="border px-4 py-2">' + capitalizeFirstLetter(col) + '</th>';
+//     });
 
-    return '<table class="m-auto">' +
-        '<thead><tr id="header-row">' +
-        headerRow +
-        '</tr></thead><tbody id="table-body">' +
-        bodyRows +
-        '</tbody></table>';
-}
+//     data.map(function (row) {
+//         bodyRows += '<tr>';
+//         cols.filter(col => col !== 'absolute_url').map(function (colName) {
+//             if (colName === 'title') {
+//                 bodyRows += '<td class="border px-4 py-2"><a href="' + row['absolute_url'] + '">' + row[colName] + '</a></td>';
+//             } else if (colName === 'size' || colName == 'industry') {
+//                 bodyRows += '<td class="hidden">' + hashString(row[colName]) + '</td>'; // hash these values so they're more unique
+//             } else {
+//                 bodyRows += '<td class="border px-4 py-2">' + row[colName] + '</td>';
+//             }
+//         });
+//         bodyRows += '</tr>';
+//     });
 
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+//     return '<table class="m-auto">' +
+//         '<thead><tr id="header-row">' +
+//         headerRow +
+//         '</tr></thead><tbody id="table-body">' +
+//         bodyRows +
+//         '</tbody></table>';
+// }
 
-function getElementsWithoutText(strs, tag) {
-    return Array.prototype.slice.call(document.getElementsByTagName(tag)).filter(el => strs.some(s => !el.textContent.trim().includes(s)));
-}
+// function capitalizeFirstLetter(string) {
+//     return string.charAt(0).toUpperCase() + string.slice(1);
+// }
 
-// Java's hash function - https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
-function hashString(str) {
-    var hash = 0, i, chr;
-    if (str.length === 0) return hash;
-    for (i = 0; i < str.length; i++) {
-        chr = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + chr;
-        hash |= 0; // Convert to 32bit integer
-    }
-    return hash;
-};
+// function getElementsWithoutText(strs, tag) {
+//     return Array.prototype.slice.call(document.getElementsByTagName(tag)).filter(el => strs.some(s => !el.textContent.trim().includes(s)));
+// }
+
+// // Java's hash function - https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+// function hashString(str) {
+//     var hash = 0, i, chr;
+//     if (str.length === 0) return hash;
+//     for (i = 0; i < str.length; i++) {
+//         chr = str.charCodeAt(i);
+//         hash = ((hash << 5) - hash) + chr;
+//         hash |= 0; // Convert to 32bit integer
+//     }
+//     return hash;
+// };
