@@ -33,27 +33,32 @@
         <option value="fin">Finance</option>
     </select>
 
-    <div id="app">
+    <div id="app" class="m-auto">
         <div>
-        <select v-model="column">
-          <option :value="null">No Column Filter</option>
-          <option v-for="col in cols" :key="col">{{ "{{ col }}" }}</option>
-        </select>
-        <input type="text" v-model="search" placeholder="Search">
+            <select v-model="city">
+                <option disabled>City</option>
+                <option :value="null">Any</option>
+                <option v-for="c in cities" :key="c">{{ "{{ c }}" }}</option>
+            </select>
+            <p>{{ "{{ city }}" }}</p>
+        </div>
+        <div>
+            <input type="text" v-model="search" placeholder="Search">
+            <input type="text" v-model="search2" placeholder="Search2">
         </div>
         <table>
-          <thead>
-            <tr>
-              <th v-for="col in cols" :key="col">{{ "{{ col }}" }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in rows" :key="row.id">
-              <td v-for="col in cols" :key="col">{{ "{{ row[col] }}" }}</td>
-            </tr>
-          </tbody>
+            <thead>
+                <tr>
+                    <th v-for="col in colHeaders" :key="col">{{ "{{ col }}" }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in rows" :key="row.id">
+                    <td v-for="col in cols" :key="col">{{ "{{ row[col] }}" }}</td>
+                </tr>
+            </tbody>
         </table>
-      </div>
+    </div>
 
 </article>
 {{ end }}
