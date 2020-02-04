@@ -38,9 +38,23 @@
             <select v-model="city">
                 <option disabled>City</option>
                 <option :value="null">Any</option>
-                <option v-for="c in cities" :key="c">{{ "{{ c }}" }}</option>
+                <option v-for="c in cities">{{ "{{ c }}" }}</option>
             </select>
             <p>{{ "{{ city }}" }}</p>
+
+            <select v-model="size">
+                <option disabled>Size</option>
+                <option :value="null">Any</option>
+                <option v-for="s in sizes" :value="s.value">{{ "{{ s.text }}" }}</option>
+            </select>
+            <p>{{ "{{ size }}" }}</p>
+
+            <select v-model="industry">
+                <option disabled>Industry</option>
+                <option :value="null">Any</option>
+                <option v-for="i in industries" :value="i.value">{{ "{{ i.text }}" }}</option>
+            </select>
+            <p>{{ "{{ industry }}" }}</p>
         </div>
         <div>
             <input type="text" v-model="search" placeholder="Search">

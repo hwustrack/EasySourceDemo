@@ -284,7 +284,20 @@ window.addEventListener('load', function () {
             cities: ["San Francisco",
                 "New York",
                 "Chicago",
-                "Remote"]
+                "Remote"],
+            size: null,
+            sizes: [
+                { text: "Small", value: "sm" },
+                { text: "Medium", value: "med" },
+                { text: "Large", value: "lg" }
+            ],
+            industry: null,
+            industries: [
+                { text: "Tech", value: "tech" },
+                { text: "Media", value: "mda" },
+                { text: "Beauty", value: "bty" },
+                { text: "Finance", value: "fin" }
+            ]
         },
         computed: {
             cols() {
