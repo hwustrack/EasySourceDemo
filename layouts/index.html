@@ -60,15 +60,15 @@
             <input type="text" v-model="search" placeholder="Search">
             <input type="text" v-model="search2" placeholder="Search2">
         </div>
-        <table>
+        <table class="table-auto">
             <thead>
                 <tr>
-                    <th v-for="col in colHeaders" :key="col">{{ "{{ col }}" }}</th>
+                    <th v-for="col in colHeaders" :key="col" class="border px-4 py-2">{{ "{{ col }}" }}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="row in rows" :key="row.id">
-                    <td v-for="col in cols" :key="col">{{ "{{ row[col] }}" }}</td>
+                    <td v-for="col in cols" :key="col" class="border px-4 py-2">{{ "{{ row[col] }}" }}</td>
                 </tr>
             </tbody>
         </table>
