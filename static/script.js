@@ -26,6 +26,11 @@ const COMPANIES = {
     }
 };
 
+const HIDDEN_COLUMNS = [
+    "size",
+    "industry",
+];
+
 var JOBS = [{
     "company": "betterment",
     "size": "sm",
@@ -301,7 +306,7 @@ window.addEventListener('load', function () {
         },
         computed: {
             cols() {
-                return JOBS.length >= 1 ? Object.keys(JOBS[0]) : []
+                return JOBS.length >= 1 ? Object.keys(JOBS[0]).filter(j => !HIDDEN_COLUMNS.includes(j)) : []
             },
             colHeaders() {
                 return this.cols.map(c => c.charAt(0).toUpperCase() + c.slice(1))
