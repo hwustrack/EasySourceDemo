@@ -6,6 +6,7 @@
 
     <div id="app" class="m-auto">
         <div>
+
             <p>I would like to live in</p>
             <select v-model="location">
                 <option disabled>City</option>
@@ -27,24 +28,25 @@
                 <option v-for="i in industries" :value="i.value">{{ "{{ i.text }}" }}</option>
             </select>
         </div>
-        <div>
+        <div v-if="loading">Loading...</div>
+        <div v-else>
             <input type="text" v-model="titleSearch" placeholder="Title Filter">
+            <table class="table-auto m-auto">
+                <thead>
+                    <tr>
+                        <th v-for="col in colHeaders" :key="col" class="border px-4 py-2">{{ "{{ col }}" }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="row in rows" :key="row.id">
+                        <td v-for="col in cols" :key="col" class="border px-4 py-2">
+                            <a v-if="col === 'title'" :href="row['absolute_url']">{{ "{{ row[col] }}" }}</a>
+                            <span v-else>{{ "{{ row[col] }}" }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <table class="table-auto m-auto">
-            <thead>
-                <tr>
-                    <th v-for="col in colHeaders" :key="col" class="border px-4 py-2">{{ "{{ col }}" }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="row in rows" :key="row.id">
-                    <td v-for="col in cols" :key="col" class="border px-4 py-2">
-                        <a v-if="col === 'title'" :href="row['absolute_url']">{{ "{{ row[col] }}" }}</a>
-                        <span v-else>{{ "{{ row[col] }}" }}</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
     </div>
 
 </article>
