@@ -26,9 +26,10 @@ const COMPANIES = {
     }
 };
 
-const HIDDEN_COLUMNS = [
+const IGNORED_COLUMNS = [
     "size",
     "industry",
+    "absolute_url"
 ];
 
 var JOBS = [{
@@ -174,35 +175,35 @@ var JOBS = [{
 }, {
     "company": "thrillist",
     "size": "med",
-    "industry": "media",
+    "industry": "mda",
     "title": "Commerce Editor",
     "location": "New York, NY",
     "absolute_url": "https://boards.greenhouse.io/thrillist/jobs/2061792"
 }, {
     "company": "thrillist",
     "size": "med",
-    "industry": "media",
+    "industry": "mda",
     "title": "Director of Audience Development, Thrillist ",
     "location": "New York, NY",
     "absolute_url": "https://boards.greenhouse.io/thrillist/jobs/2006232"
 }, {
     "company": "thrillist",
     "size": "med",
-    "industry": "media",
+    "industry": "mda",
     "title": "Office Production Assistant ",
     "location": "New York, NY",
     "absolute_url": "https://boards.greenhouse.io/thrillist/jobs/2002379"
 }, {
     "company": "thrillist",
     "size": "med",
-    "industry": "media",
+    "industry": "mda",
     "title": "Senior Designer, Thrillist ",
     "location": "New York, NY",
     "absolute_url": "https://boards.greenhouse.io/thrillist/jobs/2006035"
 }, {
     "company": "thrillist",
     "size": "med",
-    "industry": "media",
+    "industry": "mda",
     "title": "Staff Editor, Food & Travel",
     "location": "Los Angeles, CA",
     "absolute_url": "https://boards.greenhouse.io/thrillist/jobs/1273769"
@@ -230,28 +231,28 @@ var JOBS = [{
 }, {
     "company": "birchbox",
     "size": "med",
-    "industry": "beauty",
+    "industry": "bty",
     "title": "Data Analyst",
     "location": "New York, NY",
     "absolute_url": "http://www.birchbox.com/about/openings?gh_jid=2033786"
 }, {
     "company": "birchbox",
     "size": "med",
-    "industry": "beauty",
+    "industry": "bty",
     "title": "Operations Intern - Birchbox UK",
     "location": "London",
     "absolute_url": "http://www.birchbox.com/about/openings?gh_jid=1968614"
 }, {
     "company": "birchbox",
     "size": "med",
-    "industry": "beauty",
+    "industry": "bty",
     "title": "Part-Time Discovery Specialist (Temp)",
     "location": "New York",
     "absolute_url": "http://www.birchbox.com/about/openings?gh_jid=2049219"
 }, {
     "company": "birchbox",
     "size": "med",
-    "industry": "beauty",
+    "industry": "bty",
     "title": "Senior Software Engineer (Frontend) ",
     "location": "New York",
     "absolute_url": "http://www.birchbox.com/about/openings?gh_jid=2027284"
@@ -283,10 +284,9 @@ window.addEventListener('load', function () {
     new Vue({
         el: '#app',
         data: {
-            search: null,
-            search2: null,
-            city: null,
-            cities: ["San Francisco",
+            location: null,
+            locations: [
+                "San Francisco",
                 "New York",
                 "Chicago",
                 "Remote"],
@@ -302,33 +302,37 @@ window.addEventListener('load', function () {
                 { text: "Media", value: "mda" },
                 { text: "Beauty", value: "bty" },
                 { text: "Finance", value: "fin" }
-            ]
+            ],
+            titleSearch: null,
         },
         computed: {
             cols() {
-                return JOBS.length >= 1 ? Object.keys(JOBS[0]).filter(j => !HIDDEN_COLUMNS.includes(j)) : []
+                return JOBS.length >= 1 ? Object.keys(JOBS[0]).filter(j => !IGNORED_COLUMNS.includes(j)) : []
             },
             colHeaders() {
-                return this.cols.map(c => c.charAt(0).toUpperCase() + c.slice(1))
+                return this.cols.map(c => capitalizeFirstLetter(c))
             },
             rows() {
                 if (!JOBS.length) {
                     return []
                 }
-                if (!this.search && !this.search2) {
-                    return JOBS
-                }
 
                 return JOBS.filter(job => {
-                    var titleContains = !this.search || this.search && job['title'].toLowerCase().includes(this.search.toLowerCase())
-                    var locationContains = !this.search2 || this.search2 && job['location'].toLowerCase().includes(this.search2.toLowerCase())
+                    var locationContains = !this.location || this.location && job['location'].toLowerCase().includes(this.location.toLowerCase())
+                    var industryContains = !this.industry || this.industry && job['industry'].toLowerCase().includes(this.industry.toLowerCase())
+                    var sizeContains = !this.size || this.size && job['size'].toLowerCase().includes(this.size.toLowerCase())
+                    var titleContains = !this.titleSearch || this.titleSearch && job['title'].toLowerCase().includes(this.titleSearch.toLowerCase())
                     
-                    return titleContains && locationContains
+                    return titleContains && locationContains && industryContains && sizeContains
                 })
             }
         }
     })
 });
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 // window.addEventListener('load', function () {
 //     getJobs();

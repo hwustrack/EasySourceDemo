@@ -2,65 +2,35 @@
 <article class="text-center text-gray-700">
 
     <h1 class="font-serif text-5xl text-gray-600">{{ .Title }}</h1>
-    <h3 class="text-gray-500 text-xl mb-6">{{ $.Param "tagline" }}</h3>
-
-    <p>I would like to live in</p>
-    <select id="location-selector" onchange="filterJobs()">
-        <option value="#inv4l!d">City</option>
-        <option value="">Any</option>
-        <option value="San Francisco">San Francisco</option>
-        <option value="New York">New York</option>
-        <option value="Chicago">Chicago</option>
-        <option value="Remote">Remote</option>
-    </select>
-
-    <p>I would like my company size to be</p>
-    <select id="size-selector" onchange="filterJobs()">
-        <option value="#inv4l!d">Size</option>
-        <option value="">Any</option>
-        <option value="sm">Small</option>
-        <option value="med">Medium</option>
-        <option value="lg">Large</option>
-    </select>
-
-    <p>I would like to work in</p>
-    <select id="industry-selector" onchange="filterJobs()">
-        <option value="#inv4l!d">Industry</option>
-        <option value="">Any</option>
-        <option value="tech">Tech</option>
-        <option value="mda">Media</option>
-        <option value="bty">Beauty</option>
-        <option value="fin">Finance</option>
-    </select>
+    <h3 class="font-serif text-gray-500 text-xl mb-6">{{ $.Param "tagline" }}</h3>
 
     <div id="app" class="m-auto">
         <div>
-            <select v-model="city">
+            <p>I would like to live in</p>
+            <select v-model="location">
                 <option disabled>City</option>
                 <option :value="null">Any</option>
-                <option v-for="c in cities">{{ "{{ c }}" }}</option>
+                <option v-for="c in locations">{{ "{{ c }}" }}</option>
             </select>
-            <p>{{ "{{ city }}" }}</p>
 
+            <p>I would like my company size to be</p>
             <select v-model="size">
                 <option disabled>Size</option>
                 <option :value="null">Any</option>
                 <option v-for="s in sizes" :value="s.value">{{ "{{ s.text }}" }}</option>
             </select>
-            <p>{{ "{{ size }}" }}</p>
 
+            <p>I would like to work in</p>
             <select v-model="industry">
                 <option disabled>Industry</option>
                 <option :value="null">Any</option>
                 <option v-for="i in industries" :value="i.value">{{ "{{ i.text }}" }}</option>
             </select>
-            <p>{{ "{{ industry }}" }}</p>
         </div>
         <div>
-            <input type="text" v-model="search" placeholder="Search">
-            <input type="text" v-model="search2" placeholder="Search2">
+            <input type="text" v-model="titleSearch" placeholder="Title Filter">
         </div>
-        <table class="table-auto">
+        <table class="table-auto m-auto">
             <thead>
                 <tr>
                     <th v-for="col in colHeaders" :key="col" class="border px-4 py-2">{{ "{{ col }}" }}</th>
@@ -68,7 +38,10 @@
             </thead>
             <tbody>
                 <tr v-for="row in rows" :key="row.id">
-                    <td v-for="col in cols" :key="col" class="border px-4 py-2">{{ "{{ row[col] }}" }}</td>
+                    <td v-for="col in cols" :key="col" class="border px-4 py-2">
+                        <a v-if="col === 'title'" :href="row['absolute_url']">{{ "{{ row[col] }}" }}</a>
+                        <span v-else>{{ "{{ row[col] }}" }}</span>
+                    </td>
                 </tr>
             </tbody>
         </table>
