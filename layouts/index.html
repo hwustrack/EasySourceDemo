@@ -1,8 +1,10 @@
 {{ define "main" }}
-<article class="text-center text-gray-700">
+<article class="text-center w-full text-gray-700">
 
-    <h1 class="font-serif text-5xl text-gray-600">{{ .Title }}</h1>
-    <h3 class="font-serif text-gray-500 text-xl mb-6">{{ $.Param "tagline" }}</h3>
+    <div class="md:m-10">
+        <h1 class="font-serif text-3xl md:text-5xl text-gray-600">{{ .Title }}</h1>
+        <h3 class="font-serif text-gray-500 text-xl md:text-2xl mb-6">{{ $.Param "tagline" }}</h3>
+    </div>
 
     <div id="app" class="m-auto">
         <div>
@@ -33,7 +35,7 @@
         <transition name="fade">
             <div v-if="!loading">
                 <input type="text" v-model="titleSearch" placeholder="Title Filter" class="my-2 border">
-                <table class="table table-fixed w-full m-auto mb-4">
+                <table class="table table-fixed max-w-4xl w-full m-auto mb-4">
                     <thead>
                         <tr>
                             <th v-for="col in colHeaders" :key="col" class="border w-1/3 px-4 py-2">{{ "{{ col }}" }}</th>
