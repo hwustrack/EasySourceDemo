@@ -2,11 +2,25 @@
 <!DOCTYPE html>
 <html>
     {{- partial "head.html" . -}}
-    <body class="flex flex-col min-h-screen">
+    <body>
         {{- partial "header.html" . -}}
-        <main class="flex-1 sm:mx-4 md:mx-12 lg:mx-24 mt-4 sm:mt-16">
+        <main class="mx-2 sm:mx-4 md:mx-12 lg:mx-24 mt-4 sm:mt-16 mb-20">
         {{- block "main" . }}{{- end }}
         </main>
-        {{- partial "footer.html" . -}}>
+        {{- partial "footer.html" . -}}
+
+        <script>
+            document.getElementById('nav-open').onclick = function () {
+                document.getElementById("nav-menu").classList.toggle("hidden");
+                document.getElementById("nav-open").classList.toggle("hidden");
+                document.getElementById("nav-close").classList.toggle("hidden");
+            }
+            document.getElementById('nav-close').onclick = function () {
+                document.getElementById("nav-menu").classList.toggle("hidden");
+                document.getElementById("nav-close").classList.toggle("hidden");
+                document.getElementById("nav-open").classList.toggle("hidden");
+            }
+        </script>
+
     </body>
 </html>

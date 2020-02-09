@@ -1,4 +1,9 @@
 baseURL = "https://zealous-lamport-07038f.netlify.com/"
 languageCode = "en-us"
-title = "Easy Source"
+title = "EasySource"
 theme = "tailwindcss-starter"
+
+[[menu.main]]
+    name = "About"
+    weight = 1
+    url  = "/about/"

@@ -1,12 +1,20 @@
-<!-- load js script -->
-
-<meta charset="utf-8"/>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>{{ .Site.Title }}</title>
 
-{{ $style := resources.Get "css/styles.css" | postCSS (dict "config" "./assets/css/dev/postcss.config.js") }}
-<link rel="stylesheet" href="{{ $style.Permalink }}">
 
-<link rel="stylesheet" type="text/css" href="styles.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
-<script src="script.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+{{ if .Site.IsServer }}
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    {{ $style := resources.Get "css/styles.css" | postCSS (dict "config" "./assets/css/dev/postcss.config.js") }}
+    <link rel="stylesheet" href="{{ $style.Permalink }}">
+{{ else }}
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    {{ $style := resources.Get "css/styles.css" | postCSS (dict "config" "./assets/css/postcss.config.js") | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}">
+{{ end }}
+
+<link rel="stylesheet" type="text/css" href="/styles.css">
+<script src="/script.js"></script>
