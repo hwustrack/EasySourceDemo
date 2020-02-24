@@ -7,3 +7,8 @@ theme = "tailwindcss-starter"
     name = "About"
     weight = 1
     url  = "/about/"
+[[menu.main]]
+    name = "Demo"
+    weight = 2
+    url  = "/demo/"
+    
