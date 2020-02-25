@@ -19,11 +19,24 @@
   {{ $style := resources.Get "css/styles.css" | postCSS (dict "config" "./assets/css/dev/postcss.config.js") }}
   <link rel="stylesheet" href="{{ $style.Permalink }}" />
   <script src="/demo.js"></script>
-  <link rel="stylesheet" type="text/css" href="/demo.css">
+  <link rel="stylesheet" type="text/css" href="/demo.css" />
 
-  <!-- TODO: try to get nav bar -->
+  <body class="max-w-5xl m-auto">
+    <!-- TODO: try to get nav bar, right side should have My Jobs (1) -->
+    <div class="flex">
+      <div class="flex-auto">
+        <a href="http://easysource.ai/">
+          <img
+            src="https://secureservercdn.net/198.71.233.47/jbp.596.myftpupload.com/wp-content/uploads/2020/02/logo_es_sm-2.png"
+            alt="EasySource"
+            id="logo"
+            class="w-24"
+          />
+        </a>
+      </div>
+      <div class="flex-auto text-right">My Jobs (<span id="myJobsCount">0</span>)</div>
+    </div>
 
-  <body>
     <main class="w-4/5 m-auto">
       <h1 class="text-2xl my-4">Jobs Matching Your Preferences</h1>
 
@@ -52,21 +65,21 @@
                 <!-- TODO: pop up -->
                 Career Path
               </button>
-              <button onclick="updateText(this, 'Saved!')" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+              <button onclick="updateText(this, 'Saved!');incrementJobCount()" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
                 Save
               </button>
               <button onclick="toggleNextDiv(this)" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
                 Remove
               </button>
-              <div class="hidden">
+              <div class="hidden my-2">
                 What didn't you like?
-                <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                <button class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded">
                   Position
                 </button>
-                <button onclick="hideReddit()" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                <button onclick="hideReddit()" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded">
                   Company
                 </button>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                <button class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded">
                   Career path
                 </button>
               </div>

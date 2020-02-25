@@ -15,3 +15,9 @@ function updateText(clickedElement, updatedText) {
 function toggleCareerPathModal() {
     document.getElementById('careerPathModal').classList.toggle("hidden");
 }
+
+function incrementJobCount() {
+    let countElement = document.getElementById('myJobsCount');
+    let count = parseInt(countElement.innerHTML);
+    countElement.innerHTML = count + 1;
+}
