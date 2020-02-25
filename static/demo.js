@@ -11,3 +11,7 @@ function hideReddit() {
 function updateText(clickedElement, updatedText) {
     clickedElement.innerHTML = updatedText;
 }
+
+function toggleCareerPathModal() {
+    document.getElementById('careerPathModal').classList.toggle("hidden");
+}

@@ -19,6 +19,7 @@
   {{ $style := resources.Get "css/styles.css" | postCSS (dict "config" "./assets/css/dev/postcss.config.js") }}
   <link rel="stylesheet" href="{{ $style.Permalink }}" />
   <script src="/demo.js"></script>
+  <link rel="stylesheet" type="text/css" href="/demo.css">
 
   <!-- TODO: try to get nav bar -->
 
@@ -32,10 +33,10 @@
         <li>Location: New York City</li>
         <li>Industry: Technology</li>
         <li>Job Function: Two</li>
-	  </ul>
-	  <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-		Update Preferences
-	  </button>
+      </ul>
+      <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+        Update Preferences
+      </button>
 
       <h2 class="text-xl my-2">Jobs For You</h2>
       <ul>
@@ -44,40 +45,44 @@
           <div class="hidden">
             Reddit is product company that runs reddit.com.
             <div>
-				<button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-					Matched Info
-				</button>
-				<button onclick="toggleNextDiv(this)" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-					<!-- TODO: pop up -->
-					Career Path
-				</button>
-				<div class="hidden">
-					Software developer -> Senior software developer -> Architect
-				</div>
-				<button onclick="updateText(this, 'Saved!')"class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-					Save
-				</button>
-				<button onclick="toggleNextDiv(this)" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-					Remove
-				</button>
-				<div class="hidden">
-					What didn't you like?
-					<button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-						Position
-					</button>
-					<button onclick="hideReddit()" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-						Company
-					</button>
-					<button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-						Career path
-					</button>
-				</div>
+              <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                Matched Info
+              </button>
+              <button onclick="toggleCareerPathModal()" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                <!-- TODO: pop up -->
+                Career Path
+              </button>
+              <button onclick="updateText(this, 'Saved!')" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                Save
+              </button>
+              <button onclick="toggleNextDiv(this)" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                Remove
+              </button>
+              <div class="hidden">
+                What didn't you like?
+                <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                  Position
+                </button>
+                <button onclick="hideReddit()" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                  Company
+                </button>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                  Career path
+                </button>
+              </div>
             </div>
           </div>
         </li>
-		<li>Software engineer - GitLab - 75% match</li>
-		<li id="reddit2">Senior software developer - Reddit - 70% match</li>
+        <li>Software engineer - GitLab - 75% match</li>
+        <li id="reddit2">Senior software developer - Reddit - 70% match</li>
       </ul>
+
+      <div id="careerPathModal" class="modal hidden fixed z-10 left-0 top-0 h-full w-full">
+        <div class="modal-content bg-white mx-auto mt-48 p-4 w-1/2 border-solid border-2 border-black">
+          <span onclick="toggleCareerPathModal()" class="close float-right text-xl font-bold cursor-pointer">&times;</span>
+          <p>Software developer -> Senior software developer -> Architect</p>
+        </div>
+      </div>
     </main>
   </body>
 </html>
