@@ -7,3 +7,7 @@ function hideReddit() {
     document.getElementById('reddit1').classList.add("hidden");
     document.getElementById('reddit2').classList.add("hidden");
 }
+
+function updateText(clickedElement, updatedText) {
+    clickedElement.innerHTML = updatedText;
+}
