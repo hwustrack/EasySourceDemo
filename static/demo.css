@@ -1,0 +1,23 @@
+.wordpress-bg-content-gray {
+    background-color: rgba(0,0,0,0.04);
+}
+
+.wordpress-bg-gray {
+    background-color: #d6d6d6;
+}
+
+.wordpress-rounded-xl {
+    border-radius: 3em;
+}
+
+.wordpress-font {
+    font-family: 'Montserrat',Helvetica,Arial,Lucida,sans-serif;
+}
+
+.wordpress-font-color-gray {
+    color: rgb(102, 102, 102);
+}
+
+.wordpress-font-color-black {
+    color: rgb(51, 51, 51);
+}
