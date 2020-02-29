@@ -3,9 +3,8 @@ function toggleNextDiv(clickedElement) {
     div.classList.toggle("hidden");
 }
 
-function hideReddit() {
-    document.getElementById('reddit1').classList.add("hidden");
-    document.getElementById('reddit2').classList.add("hidden");
+function toggleIds(ids) {
+    ids.forEach(id => document.getElementById(id).classList.toggle("hidden"));
 }
 
 function updateText(clickedElement, updatedText) {

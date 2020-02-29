@@ -59,12 +59,60 @@
 
           <h2 class="my-2 pt-6 font-bold">Jobs For You</h2>
           <ul class="font-medium text-sm leading-loose">
-            <li id="reddit1">
-              <button onclick="toggleNextDiv(this)">Software developer - Reddit - 86% match</button>
+			<li id="marketing-whale">
+				<button onclick="toggleNextDiv(this)">Marketing Whale - 90% match</button>
+				<div class="hidden mx-4 mb-2">
+				  Description
+				  <div>
+					<button onclick="toggleCareerPathModal()" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded">
+					  Career Path
+					</button>
+					<button onclick="updateText(this, 'Saved!');incrementJobCount()" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded">
+					  Save
+					</button>
+					<button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded">
+					  Remove
+					</button>
+				  </div>
+				</div>
+			</li>
+			
+            <li id="mailzy">
+              <button onclick="toggleNextDiv(this)">mailzy - 40% match</button>
               <div class="hidden mx-4 mb-2">
-                Reddit is product company that runs reddit.com.
+                Description
                 <div>
-                  <button onclick="toggleCareerPathModal()" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded">
+                  <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded">
+                    Career Path
+                  </button>
+                  <button onclick="updateText(this, 'Saved!');incrementJobCount()" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded">
+                    Save
+                  </button>
+                  <button onclick="toggleNextDiv(this)" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded">
+                    Remove
+                  </button>
+                  <div class="hidden my-2">
+                    What didn't you like?
+                    <button onclick="toggleIds(['mailzy', 'advera', 'mlabs','wwire2'])" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded">
+                      Position
+                    </button>
+                    <button class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded">
+                      Company
+                    </button>
+                    <button class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded">
+                      Career path
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li id="wwire">
+              <button onclick="toggleNextDiv(this)">wwire - 55% match</button>
+              <div class="hidden mx-4 mb-2">
+                Description
+                <div>
+                  <button class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded">
                     Career Path
                   </button>
                   <button onclick="updateText(this, 'Saved!');incrementJobCount()" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded">
@@ -78,7 +126,7 @@
                     <button class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded">
                       Position
                     </button>
-                    <button onclick="hideReddit()" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded">
+                    <button onclick="toggleIds(['wwire','wwire2', 'brandbotic', 'perst'])" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded">
                       Company
                     </button>
                     <button class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded">
@@ -88,8 +136,13 @@
                 </div>
               </div>
             </li>
-            <li>Software engineer - GitLab - 75% match</li>
-            <li id="reddit2">Senior software developer - Reddit - 70% match</li>
+
+            <li id="advera">Advera - 32% match</li>
+            <li id="senics">Senics - 80% match</li>
+            <li id="mlabs" class="hidden">mlabs - 75% match</li>
+            <li id="wwire2" class="hidden">wwire - 72% match</li>
+            <li id="brandbotic" class="hidden">Brandbotic - 69% match</li>
+            <li id="perst" class="hidden">perst - 71% match</li>
           </ul>
 
           <div id="careerPathModal" class="modal hidden fixed z-10 left-0 top-0 h-full w-full">
